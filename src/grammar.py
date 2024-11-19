@@ -65,8 +65,14 @@ class Grammar:
                 print(f"    {symbol} -> {productions_str}")
 
     def print_first_set(self):
+        print("\nFIRST SET:")
         for nt, first_set in self.first_set.items():
             print(f"{nt} -> {first_set}")
+
+    def print_follow_set(self):
+        print("\nFOLLOW SET:")
+        for nt, follow_set in self.follow_set.items():
+            print(f"{nt} -> {follow_set}")
 
     def calculate_first_set(self):
         # Initialize FIRST sets for all non-terminals
@@ -132,4 +138,71 @@ class Grammar:
                 break
 
     def calculate_follow_set(self):
-        pass
+        # Initialize FOLLOW sets for all non-terminals
+        for nt in self.non_terminals:
+            self.follow_set[nt] = set()
+        
+        # Add $ to FOLLOW set of start symbol
+        self.follow_set[self.initial_symbol].add('$')
+        
+        # Keep iterating until no changes are made
+        while True:
+            changes_made = False
+            
+            # For each production rule
+            for nt, productions in self.productions.items():
+                for production in productions:
+                    if production == "&":  # Skip empty productions
+                        continue
+                    
+                    # Scan the production from left to right
+                    for i in range(len(production)):
+                        current = production[i]
+                        
+                        # Skip if current symbol is a terminal
+                        if current not in self.non_terminals:
+                            continue
+                        
+                        # If this is not the last symbol in the production
+                        if i < len(production) - 1:
+                            remaining = production[i + 1:]
+                            first_of_remaining = set()
+                            
+                            # Calculate FIRST set of remaining string
+                            all_can_be_empty = True
+                            for symbol in remaining:
+                                if symbol in self.terminals:
+                                    first_of_remaining.add(symbol)
+                                    all_can_be_empty = False
+                                    break
+                                elif symbol in self.non_terminals:
+                                    first_of_remaining.update(self.first_set[symbol] - {'&'})
+                                    if '&' not in self.first_set[symbol]:
+                                        all_can_be_empty = False
+                                        break
+                            
+                            # Add FIRST(remaining) - {&} to FOLLOW(current)
+                            for symbol in first_of_remaining:
+                                if symbol not in self.follow_set[current]:
+                                    self.follow_set[current].add(symbol)
+                                    changes_made = True
+                            
+                            # If all remaining symbols can derive empty
+                            if all_can_be_empty:
+                                # Add FOLLOW(nt) to FOLLOW(current)
+                                for symbol in self.follow_set[nt]:
+                                    if symbol not in self.follow_set[current]:
+                                        self.follow_set[current].add(symbol)
+                                        changes_made = True
+                        
+                        # If this is the last symbol or all following symbols can derive empty
+                        else:
+                            # Add FOLLOW(nt) to FOLLOW(current)
+                            for symbol in self.follow_set[nt]:
+                                if symbol not in self.follow_set[current]:
+                                    self.follow_set[current].add(symbol)
+                                    changes_made = True
+            
+            # If no changes were made in this iteration, we're done
+            if not changes_made:
+                break

@@ -14,7 +14,8 @@ def main():
     grammar.print_productions()
     grammar.calculate_first_set()
     grammar.print_first_set()
-
+    grammar.calculate_follow_set()
+    grammar.print_follow_set()
 
 if __name__ == "__main__":
     main()
