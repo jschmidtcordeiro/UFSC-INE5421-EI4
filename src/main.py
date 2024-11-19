@@ -12,8 +12,8 @@ def main():
 
     grammar = Grammar.from_string_EI4(input)
     grammar.print_productions()
-    print(grammar)
-
+    grammar.calculate_first_set()
+    grammar.print_first_set()
 
 
 if __name__ == "__main__":
