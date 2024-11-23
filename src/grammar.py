@@ -24,6 +24,10 @@ class Grammar:
         non_terminals = set()
         terminals = set()
         
+        # Get initial symbol from first production
+        first_prod = production_strings[0]
+        initial_symbol = first_prod.split("=")[0].strip()
+        
         # First pass: collect non-terminals (they appear on the left side of productions)
         for prod in production_strings:
             if "=" in prod:
@@ -47,32 +51,44 @@ class Grammar:
                     productions[left] = []
                 productions[left].append(right)
         
-        # Use first non-terminal in the first production as initial symbol
-        initial_symbol = next(iter(non_terminals))
-        
         return cls(list(non_terminals), list(terminals), initial_symbol, productions)
 
     def print_productions(self):
-        # Print initial symbol first
-        if self.initial_symbol in self.productions:
-            productions_str = " | ".join(self.productions[self.initial_symbol])
-            print(f"    {self.initial_symbol} -> {productions_str}")
-
-        # Print remaining symbols in alphabetical order
-        for symbol in sorted(self.productions.keys()):
-            if symbol != self.initial_symbol:
-                productions_str = " | ".join(self.productions[symbol])
-                print(f"    {symbol} -> {productions_str}")
+        # Get all symbols and sort them
+        symbols = list(self.productions.keys())
+        # Move initial symbol to front
+        if self.initial_symbol in symbols:
+            symbols.remove(self.initial_symbol)
+            symbols = [self.initial_symbol] + sorted(symbols)
+        
+        # Print productions
+        for symbol in symbols:
+            productions_str = " | ".join(self.productions[symbol])
+            print(f"    {symbol} -> {productions_str}")
 
     def print_first_set(self):
         print("\nFIRST SET:")
-        for nt, first_set in self.first_set.items():
-            print(f"{nt} -> {first_set}")
+        # Get all symbols and sort them
+        symbols = list(self.first_set.keys())
+        # Move initial symbol to front
+        if self.initial_symbol in symbols:
+            symbols.remove(self.initial_symbol)
+            symbols = [self.initial_symbol] + sorted(symbols)
+            
+        for nt in symbols:
+            print(f"{nt} -> {self.first_set[nt]}")
 
     def print_follow_set(self):
         print("\nFOLLOW SET:")
-        for nt, follow_set in self.follow_set.items():
-            print(f"{nt} -> {follow_set}")
+        # Get all symbols and sort them
+        symbols = list(self.follow_set.keys())
+        # Move initial symbol to front
+        if self.initial_symbol in symbols:
+            symbols.remove(self.initial_symbol)
+            symbols = [self.initial_symbol] + sorted(symbols)
+        
+        for nt in symbols:
+            print(f"{nt} -> {self.follow_set[nt]}")
 
     def calculate_first_set(self):
         # Initialize FIRST sets for all non-terminals
