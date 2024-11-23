@@ -1,0 +1,50 @@
+[
+    {
+      "name": "Caso de teste 1",
+      "input": "P = KVC; K = cK; K = &; V = vV; V = F; F = fPiF; F = &; C = bVCe; C = miC; C = &;",
+      "expected_first_sets": {
+        "P": ["b", "c", "f", "m", "v", "&"],
+        "K": ["c", "&"],
+        "V": ["f", "v", "&"],
+        "F": ["f", "&"],
+        "C": ["b", "m", "&"]
+      },
+      "expected_follow_sets": {
+        "P": ["$", "i"],
+        "C": ["$", "e", "i"],
+        "F": ["b", "e", "i", "m", "$"],
+        "K": ["b", "f", "i", "m", "v", "$"],
+        "V": ["b", "e", "i", "m", "$"]
+      }
+    },
+    {
+      "name": "Caso de teste 2",
+      "input": "P = KL; P = bKLe; K = cK; K = TV; T = tT; T = &; V = vV; V = &; L = mL; L = &;",
+      "expected_first_sets": {
+        "P": ["b", "c", "t", "v", "m", "&"],
+        "K": ["c", "t", "v", "&"],
+        "T": ["t", "&"],
+        "V": ["v", "&"],
+        "L": ["m", "&"]
+      },
+      "expected_follow_sets": {
+        "P": ["$"],
+        "K": ["e", "m", "$"],
+        "L": ["e", "$"],
+        "T": ["m", "e", "v", "$"],
+        "V": ["e", "m", "$"]
+      }
+    },
+    {
+      "name": "Caso de teste 3",
+      "input": "J = k; P = Jk;",
+      "expected_first_sets": {
+        "J": ["k"],
+        "P": ["k"]
+      },
+      "expected_follow_sets": {
+        "J": ["$", "k"],
+        "P": []
+      }
+    }
+]
