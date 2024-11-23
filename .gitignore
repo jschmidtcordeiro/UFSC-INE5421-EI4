@@ -5,3 +5,6 @@ __pycache__/
 *.pyz
 *.pyw
 *.pywz
+
+.vscode/
+.pytest_cache/
