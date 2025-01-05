@@ -11,11 +11,11 @@ def main():
     input = "P = KVC; K = cK; K = &; V = vV; V = F; F = fPiF; F = &; C = bVCe; C = miC; C = &;"
 
     grammar = Grammar.from_string_EI4(input)
-    grammar.print_productions()
+    # grammar.print_productions()
     grammar.calculate_first_set()
-    grammar.print_first_set()
+    # grammar.print_first_set()
     grammar.calculate_follow_set()
-    grammar.print_follow_set()
-
+    # grammar.print_follow_set()
+    grammar.print_output_EI4()
 if __name__ == "__main__":
     main()

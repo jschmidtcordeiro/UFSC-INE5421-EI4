@@ -52,6 +52,27 @@ class Grammar:
                 productions[left].append(right)
         
         return cls(list(non_terminals), list(terminals), initial_symbol, productions)
+    
+    def print_output_EI4(self):
+        # Get all symbols and sort them
+        first_symbols = list(self.first_set.keys())
+        follow_symbols = list(self.follow_set.keys())
+        
+        # Format First sets
+        first_parts = []
+        for symbol in first_symbols:
+            first_set = sorted(self.first_set[symbol])  # Sort the set elements
+            first_parts.append(f"First({symbol}) = {{{', '.join(first_set)}}}")
+        
+        # Format Follow sets
+        follow_parts = []
+        for symbol in follow_symbols:
+            follow_set = sorted(self.follow_set[symbol])  # Sort the set elements
+            follow_parts.append(f"Follow({symbol}) = {{{', '.join(follow_set)}}}")
+        
+        # Combine all parts with semicolons and spaces
+        output = '; '.join(first_parts + follow_parts) + ';'
+        print(output)
 
     def print_productions(self):
         # Get all symbols and sort them
